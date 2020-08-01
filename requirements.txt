@@ -1,0 +1,6 @@
+Flask
+requests
+tensorflow
+tensorflow-hub
+numpy
+pillow

@@ -30,15 +30,20 @@ def process_image(image):
 
 
 def _predict(image_path):
+    print("Getting Image")
     im = get_image(image_path)
     test_image = np.asarray(im)
 
+    print("Preprocessing image")
     processed_test_image = process_image(test_image)
     batched_test_image = np.expand_dims(processed_test_image, axis=0)
 
+    print("Predicting Flower")
     preds = model.predict(batched_test_image)[0]
-    ind = np.argmax(preds)
-    return ind + 1, preds[ind]
+    preds, ind = tf.nn.top_k(preds, 2)
+    print("Prediction Complete")
+    # print(ind)
+    return ind + 1, preds
 
 
 def predict(token, request_body):
@@ -52,13 +57,19 @@ def predict(token, request_body):
     if not file_url:
         return send_message(token, chat_id, "Please send a picture of flower")
 
-    cls, prob = _predict(file_url)
-    cls = str(cls)
+    classes, probs = _predict(file_url)
+    message = ""
+    for i in range(len(classes)):
+        cls = str(classes[i].numpy())
+        prob = probs[i].numpy()
+        # print(cls, prob)
+        class_name = class_names.get(cls, cls)
+        probability = f"{prob * 100:>.3f}%"
+        message_part = f"Flower Name: {class_name}\nProbability: {probability}"
+        message += "\n" + message_part
 
-    class_name = class_names.get(cls, cls)
-    probability = f"{prob * 100:>.3f}%"
-
-    return send_message(token, chat_id, f"Flower Name: {class_name}\nProbability: {probability}")
+    print("Sending Reply:", message)
+    return send_message(token, chat_id, message)
 
 
 def get_image(image_path):

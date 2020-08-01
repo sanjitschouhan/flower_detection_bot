@@ -40,7 +40,7 @@ def _predict(image_path):
 
     print("Predicting Flower")
     preds = model.predict(batched_test_image)[0]
-    preds, ind = tf.nn.top_k(preds, 2)
+    preds, ind = tf.nn.top_k(preds, 3)
     print("Prediction Complete")
     # print(ind)
     return ind + 1, preds

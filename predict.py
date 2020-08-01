@@ -65,7 +65,7 @@ def predict(token, request_body):
         # print(cls, prob)
         class_name = class_names.get(cls, cls)
         probability = f"{prob * 100:>.3f}%"
-        message_part = f"Flower Name: {class_name}\nProbability: {probability}"
+        message_part = f"{class_name}: {probability}"
         message += "\n" + message_part
 
     print("Sending Reply:", message)

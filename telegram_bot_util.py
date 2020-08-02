@@ -1,7 +1,5 @@
 import requests
 
-# bot_token = "1258354561:AAGstJOjdzGrK2yHi3x2e2U3781dREi-lUQ"
-
 send_message_url = "https://api.telegram.org/bot{bot_token}/sendMessage"
 
 get_file_url = "https://api.telegram.org/bot{bot_token}/getFile"
